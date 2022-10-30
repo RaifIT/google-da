@@ -25,7 +25,7 @@ To guide this analysis, the following questions need to be addressed:
 
 ## Business Task
 
-The business task is to analyze usage data for competitor products and recognize how they might translate to Bellbeat's alternative and how we can best these insights to our advantages in marketing.
+The business task is to analyze usage data for competitor products and recognize how they might translate to Bellbeat's alternative and how we can best use these insights to our advantages in marketing.
 
 # Data Analysis
 
@@ -45,7 +45,7 @@ library(ggplot2)
 
 ### Importing the dataset
 
-``` {r dataset}
+``` {r dataset, message=FALSE}
 activity_daily <- read_csv("fitbit_tracker_data/dailyActivity_merged.csv")
 calories_daily <- read_csv("fitbit_tracker_data/dailyCalories_merged.csv")
 intensities_daily <- read_csv("fitbit_tracker_data/dailyIntensities_merged.csv")
@@ -67,9 +67,72 @@ weight_log <- read_csv("fitbit_tracker_data/weightLogInfo_merged.csv")
 ```
 
 ### Previewing the dataset
-After importing the data, it is important to check it's structure and some values of it. This helps us understand how it's recorded and allows us to notice any oddities which require cleaning and fixing
-
-``` {r preview}
-str(sleep)
-View(sleep)
+After importing the data, it is important to check its structure and some of its values. This helps us understand how it's recorded and allows us to notice any oddities which require cleaning and fixing
+For example, let's check daily activities
+We can use `str` and `glimpse` to check the basic structure of our dataset
+``` {r preview_structure}
+str(activity_daily)
+glimpse(activity_daily)
 ```
+We can also use `dplyr` n_distinct to find the number of distinct people in the dataset which will inform our decisions
+```{r preview_count}
+n_distinct(activity_daily$Id)
+```
+We can tell there's 33 people included in the daily activities dataset. The dataset shows us information about the activities they've recorded including the data which seem to focus on movement, e.g. steps, distance, etc.
+This is useful to know as we know this type of data can be recorded by Bellabeat's devices as well.
+
+We take similar looks at other datasets to find ones of interest, first the distinct number of people in each to know if the dataset is large enough to be informative:
+```{r preview_count_all}
+n_distinct(calories_daily$Id)
+n_distinct(calories_hourly$Id)
+n_distinct(calories_minute_narrow$Id)
+n_distinct(calories_minute_wide$Id)
+n_distinct(hr_seconds$Id)
+n_distinct(intensities_daily$Id)
+n_distinct(intensities_hourly$Id)
+n_distinct(intensities_minute_narrow$Id)
+n_distinct(intensities_minute_wide$Id)
+n_distinct(METs_minute_narrow$Id)
+n_distinct(sleep_daily$Id)
+n_distinct(sleep_minute$Id)
+n_distinct(weight_log$Id)
+```
+Looking at the data above, we see that we have 33 people in each dataset except for:
+
+1. Heartrate seconds (14)
+2. Sleep daily (24)
+3. Sleep minutes (24)
+4. Weight Log (8)
+
+14 and 8 seem to be too few people to make judgements based on, so we will not use those data sets. However, sleep is an important statistic that we can track with Bellabeat's devices and 24 people is not a bad sample.
+
+### Further filtering which datasets we'll be using
+We've eliminated some of the datasets we had given the low number of unique people in them
+Next, we will check the exact structures of data to see which would be most useful for us to explore further
+
+```{r glimpses}
+glimpse(calories_daily)
+glimpse(calories_hourly)
+glimpse(calories_minute_narrow)
+glimpse(calories_minute_wide)
+```
+
+Taking a `glimpse` at the different datasets for calories, for example, shows us that we have a similar structure of time and calories burnt at/during that time. It would be useful to use different datasets from these based on the accuracy we are trying to measure. For example, if we wanted to know what time of day people burnt the most calories, we would look at minutes or hourly rather than daily.
+We also see that for calories burned per minute, we have the data in a narrow and a wide format. We will go with the narrow format and not use the wide one as a Narrow dataset works better with our R code. Furthermore, we see that for minutes measurements we have a lot of duplicate values right after one another. This may be indicative of the device's measurement taking an average rather than an accurate minute-by-minute meaasure of calories burnt. In either case, the minute scale is a bit more precise than necessary. We want to gain insights on trends and uses of smart fitness devices, not exact measures of atheletes' intensity during workout. Therefore, we'd prefer to use the daily and hourly datasets
+
+So, for calories we will look at the calories daily and calories hourly datasets moving on.
+
+We do a similar procedure for steps and indeed, we will use steps daily and steps hourly
+```{r glimpses_steps}
+glimpse(steps_daily)
+glimpse(steps_hourly)
+glimpse(hr_seconds)
+```
+
+### Cleaning the datasets
+
+Now that we know which datasets we will be working with, we need to go through them and clean them up to ensure our analysis is accurate and free from errors
+
+## Analysis
+
+Now that we have our data imported, and 
