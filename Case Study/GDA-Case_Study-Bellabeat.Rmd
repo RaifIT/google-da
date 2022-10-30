@@ -1,0 +1,59 @@
+---
+title: "Google Data Analytics Case Study: Bellabeat"
+author: "Raif IT"
+date: "2022-10-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background
+
+## About the Case Study
+
+Bellabeat, founded by Urška Sršen and Sando Mur, is a tech company with a focus on health-related products for women. They already have a solid digital marketing strategy with a high focus on SEO and social media presence. However, Urška is interested in leveraging smart device usage data in better informing their marketing strategy to fill any gaps in their strategy.
+
+## What the analysis will cover
+Sršen has asked me to study and analyze device usage data available from competitors and see how insights from that study can indfluence our marketing strategy for one Bellabeat product.
+To guide this analysis, the following questions need to be addressed:
+
+1. What are some trends in smart device usage?
+2. How could these trends apply to Bellabeat customers?
+3. How could these trends help influence Bellabeat marketing strategy?
+
+## Business Task
+
+The business task is to analyze usage data for competitor products and recognize how they might translate to Bellbeat's alternative and how we can best these insights to our advantages in marketing.
+
+# Data Analysis
+
+## Data Sources
+
+The main data source we will be using is the [FitBit Fitness Tracker Data](https://www.kaggle.com/datasets/arashnic/fitbit) dataset provided in the case study file
+
+## Setup
+
+### Importing required libraries
+
+``` {r libraries}
+library(tidyverse)
+library(ggplot2)
+#library()
+```
+
+### Importing the dataset
+
+``` {r dataset}
+sleep <- read_csv("fitbit_tracker_data/sleepDay_merged.csv")
+
+```
+
+### Previewing the dataset
+After importing the data, it is important to check it's structure and some values of it. This helps us understand how it's recorded and allows us to notice any oddities which require cleaning and fixing
+
+``` {r preview}
+str(sleep)
+View(sleep)
+```
